@@ -35,9 +35,19 @@ app.get("/date/:value", function (request, response) {
     var unixDate = date.getTime();
     response.status(200).send({unix: unixDate, string: stringDate});
   }
-  response.send("not good!");
+  response.send(null);
 });
 
+app.get("/whoami", function (req, res){
+  if(!req.headers){
+    res.status(400).send("No headers no response.");
+  }
+  const ipaddress = req.headers['x-forwarded-for'].split(",")[0];
+  const software = req.headers['user-agent'];
+  const language = req.headers['accept-language'].split(",")[0];
+  console.log(ipaddress, software, language);
+  res.status(200).send({ipaddress, software, language});
+});
 /*var url = require('url');
 var url_parts = url.parse(request.url, true);
 var query = url_parts.query; */
